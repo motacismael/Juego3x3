@@ -1,0 +1,411 @@
+/* ============================================
+   index.css — Estilos del juego Tres en Raya
+   Temática: Bandera de República Dominicana 🇩🇴
+   Colores principales: Azul, Rojo y Blanco
+   ============================================ */
+
+/* ── Importar fuente moderna de Google Fonts ── */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap');
+
+/* ── Variables CSS (Design Tokens) ── */
+:root {
+  /* Colores de la bandera dominicana */
+  --azul: #002D62;
+  --azul-claro: #0047AB;
+  --azul-glow: rgba(0, 71, 171, 0.4);
+  --rojo: #CE1126;
+  --rojo-claro: #E8344A;
+  --rojo-glow: rgba(206, 17, 38, 0.4);
+  --blanco: #FFFFFF;
+  --blanco-suave: #F0F2F5;
+
+  /* Fondos y superficies */
+  --bg-primary: #0A0E1A;
+  --bg-secondary: #111827;
+  --bg-card: rgba(17, 24, 39, 0.8);
+  --bg-glass: rgba(255, 255, 255, 0.05);
+
+  /* Texto */
+  --text-primary: #F9FAFB;
+  --text-secondary: #9CA3AF;
+  --text-muted: #6B7280;
+
+  /* Sombras */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
+  --shadow-glow-azul: 0 0 30px var(--azul-glow);
+  --shadow-glow-rojo: 0 0 30px var(--rojo-glow);
+
+  /* Tipografía */
+  --font-family: 'Outfit', sans-serif;
+
+  /* Bordes */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  /* Transiciones */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+}
+
+/* ── Reset y estilos base ── */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+
+  /* Fondo con patrón sutil */
+  background-image:
+    radial-gradient(circle at 20% 20%, var(--azul-glow) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, var(--rojo-glow) 0%, transparent 50%);
+}
+
+/* ── Contenedor principal de la app ── */
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  gap: 1.5rem;
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Header ── */
+.header {
+  text-align: center;
+}
+
+.title {
+  font-size: 2.8rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--blanco) 0%, var(--azul-claro) 50%, var(--rojo-claro) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.title .flag {
+  -webkit-text-fill-color: initial;
+  font-size: 2.2rem;
+  display: inline-block;
+  animation: wave 2s ease-in-out infinite;
+}
+
+@keyframes wave {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(15deg); }
+  75% { transform: rotate(-15deg); }
+}
+
+.subtitle {
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--text-secondary);
+  margin-top: 0.3rem;
+  letter-spacing: 0.05em;
+}
+
+/* ── Indicador de turno ── */
+.turn-indicator {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.turn-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.8rem 1.2rem;
+  border-radius: var(--radius-md);
+  background: var(--bg-glass);
+  border: 2px solid transparent;
+  transition: all var(--transition-normal);
+  min-width: 130px;
+}
+
+.turn-card.active {
+  border-color: var(--azul-claro);
+  background: rgba(0, 71, 171, 0.15);
+  box-shadow: var(--shadow-glow-azul);
+  transform: scale(1.05);
+}
+
+.turn-mark {
+  font-size: 1.8rem;
+}
+
+.turn-name {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.turn-card.active .turn-name {
+  color: var(--blanco);
+}
+
+.vs-text {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+/* ── Tablero de juego (Board) ── */
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  padding: 6px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, var(--azul) 0%, var(--rojo) 100%);
+  box-shadow: var(--shadow-lg);
+  position: relative;
+}
+
+/* Efecto de brillo decorativo detrás del tablero */
+.board::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: calc(var(--radius-lg) + 4px);
+  background: linear-gradient(135deg, var(--azul-claro), var(--rojo-claro), var(--azul-claro));
+  z-index: -1;
+  opacity: 0.5;
+  filter: blur(12px);
+}
+
+/* ── Casillas (Square) ── */
+.square {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  background: var(--bg-secondary);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+.square::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0, 71, 171, 0.1), rgba(206, 17, 38, 0.1));
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.square:hover:not(.filled) {
+  background: var(--bg-card);
+  transform: scale(1.05);
+}
+
+.square:hover:not(.filled)::before {
+  opacity: 1;
+}
+
+.square:active:not(.filled) {
+  transform: scale(0.95);
+}
+
+.square.filled {
+  cursor: default;
+  animation: placeMarker 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes placeMarker {
+  0% { transform: scale(0); opacity: 0; }
+  60% { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Efecto de casilla ganadora */
+.square.winning {
+  background: linear-gradient(135deg, var(--azul) 0%, var(--rojo) 100%);
+  animation: winPulse 1.5s ease-in-out infinite;
+  box-shadow: 0 0 20px var(--azul-glow), 0 0 20px var(--rojo-glow);
+}
+
+@keyframes winPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 20px var(--azul-glow), 0 0 20px var(--rojo-glow);
+  }
+  50% {
+    transform: scale(1.08);
+    box-shadow: 0 0 35px var(--azul-glow), 0 0 35px var(--rojo-glow);
+  }
+}
+
+/* ── Banner de resultado ── */
+.result-banner {
+  padding: 1rem 2rem;
+  border-radius: var(--radius-xl);
+  background: linear-gradient(135deg, var(--azul) 0%, var(--rojo) 100%);
+  box-shadow: var(--shadow-md);
+  animation: slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.result-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px) scale(0.9); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.result-message {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--blanco);
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* ── Botón reiniciar ── */
+.reset-button {
+  padding: 0.8rem 2rem;
+  font-family: var(--font-family);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--blanco);
+  background: linear-gradient(135deg, var(--azul) 0%, var(--azul-claro) 100%);
+  border: none;
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-sm);
+  letter-spacing: 0.02em;
+  position: relative;
+  overflow: hidden;
+}
+
+.reset-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--rojo) 0%, var(--rojo-claro) 100%);
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
+.reset-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md), var(--shadow-glow-azul);
+}
+
+.reset-button:hover::before {
+  opacity: 1;
+}
+
+.reset-button:active {
+  transform: translateY(0);
+}
+
+/* Asegurar que el texto del botón esté sobre el pseudo-elemento */
+.reset-button span,
+.reset-button {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Footer ── */
+.footer {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.footer strong {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+/* ── Responsive Design ── */
+@media (max-width: 480px) {
+  .title {
+    font-size: 2rem;
+  }
+
+  .square {
+    width: 80px;
+    height: 80px;
+    font-size: 2rem;
+  }
+
+  .turn-card {
+    min-width: 100px;
+    padding: 0.6rem 0.8rem;
+  }
+
+  .turn-name {
+    font-size: 0.65rem;
+  }
+
+  .result-message {
+    font-size: 1.1rem;
+  }
+
+  .reset-button {
+    padding: 0.7rem 1.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .title {
+    font-size: 3.5rem;
+  }
+
+  .square {
+    width: 120px;
+    height: 120px;
+    font-size: 3rem;
+  }
+
+  .result-message {
+    font-size: 1.5rem;
+  }
+}
